@@ -184,45 +184,67 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 }
 
 function formatContent(content: string): string {
-    // Convert markdown-like content to HTML
-    let html = content
-        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/^\- (.*$)/gim, '<li>$1</li>')
-        .replace(/^(\d+)\. (.*$)/gim, '<li>$2</li>')
-        .replace(/\n\n/g, '</p><p>')
-        .replace(/\n/g, '<br>');
+    // 1. Split into blocks by double newlines
+    const blocks = content.split(/\n\n+/);
 
-    // Wrap lists
-    html = html.replace(/(<li>.*<\/li>)+/g, (match) => {
-        if (match.includes('1.') || /^\d/.test(match)) {
-            return `<ol>${match}</ol>`;
-        }
-        return `<ul>${match}</ul>`;
-    });
+    const htmlBlocks = blocks.map((block) => {
+        const trimmed = block.trim();
+        if (!trimmed) return "";
 
-    // Handle tables (basic)
-    const tableRegex = /\|(.+)\|/g;
-    let hasTable = false;
-    html = html.replace(tableRegex, (match) => {
-        const cells = match.split('|').filter(c => c.trim());
-        const isHeader = !hasTable;
-        hasTable = true;
-
-        if (cells[0].includes('---')) {
-            return '';
+        // Headers
+        if (trimmed.startsWith("#")) {
+            const level = trimmed.match(/^#+/)?.[0].length || 1;
+            const text = trimmed.replace(/^#+\s*/, "");
+            return `<h${level}>${parseInline(text)}</h${level}>`;
         }
 
-        const cellTag = isHeader ? 'th' : 'td';
-        const row = cells.map(c => `<${cellTag}>${c.trim()}</${cellTag}>`).join('');
-        return `<tr>${row}</tr>`;
+        // Lists (Unordered)
+        if (trimmed.match(/^-\s/m)) {
+            const items = trimmed.split("\n").filter(line => line.trim().startsWith("-"));
+            const listItems = items.map(item => `<li>${parseInline(item.replace(/^-\s*/, ""))}</li>`).join("");
+            return `<ul>${listItems}</ul>`;
+        }
+
+        // Lists (Ordered)
+        if (trimmed.match(/^\d+\.\s/m)) {
+            const items = trimmed.split("\n").filter(line => line.trim().match(/^\d+\./));
+            const listItems = items.map(item => `<li>${parseInline(item.replace(/^\d+\.\s*/, ""))}</li>`).join("");
+            return `<ol>${listItems}</ol>`;
+        }
+
+        // Tables
+        if (trimmed.includes("|") && trimmed.includes("---")) {
+            const rows = trimmed.split("\n").filter(row => row.trim());
+            const headerRow = rows[0];
+            const bodyRows = rows.slice(2); // Skip separator row
+
+            const parseRow = (row: string, isHeader: boolean) => {
+                const cells = row.split("|").filter(c => c.trim() !== ""); // Basic split, assumes no escaped pipes
+                const tag = isHeader ? "th" : "td";
+                return `<tr>${cells.map(c => `<${tag}>${parseInline(c.trim())}</${tag}>`).join("")}</tr>`;
+            };
+
+            return `
+                <div class="overflow-x-auto my-6">
+                    <table class="w-full border-collapse text-sm">
+                        <thead>${parseRow(headerRow, true)}</thead>
+                        <tbody>${bodyRows.map(row => parseRow(row, false)).join("")}</tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        // Paragraphs
+        return `<p>${parseInline(trimmed.replace(/\n/g, "<br>"))}</p>`;
     });
 
-    if (hasTable) {
-        html = html.replace(/(<tr>[\s\S]*?<\/tr>)+/g, '<table class="w-full border-collapse">$&</table>');
-    }
+    return htmlBlocks.join("");
+}
 
-    return `<p>${html}</p>`;
+function parseInline(text: string): string {
+    return text
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*(.*?)\*/g, "<em>$1</em>")
+        .replace(/`([^`]+)`/g, "<code class='bg-[var(--gray-100)] dark:bg-[var(--gray-800)] px-1 rounded'>$1</code>")
+        .replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' class='text-[var(--primary-600)] hover:underline'>$1</a>");
 }
