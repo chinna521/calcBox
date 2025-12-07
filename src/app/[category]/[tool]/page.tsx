@@ -67,8 +67,8 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
     }
 
     return {
-        title: `${tool.name} - Free Online Calculator | CalcBox`,
-        description: tool.shortDescription,
+        title: tool.metaTitle || `${tool.name} - Free Online Calculator | CalcBox`,
+        description: tool.metaDescription || tool.shortDescription,
     };
 }
 
@@ -119,7 +119,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
                                     {tool.icon}
                                 </div>
                                 <div>
-                                    <h1 className="text-2xl md:text-3xl font-bold">{tool.name}</h1>
+                                    <h1 className="text-2xl md:text-3xl font-bold">{tool.h1Title || tool.name}</h1>
                                     <p className="text-[var(--foreground-secondary)]">{tool.shortDescription}</p>
                                 </div>
                             </div>

@@ -14,6 +14,10 @@ export interface Tool {
   categoryId: string;
   shortDescription: string;
   icon: string;
+  // SEO Fields
+  metaTitle?: string;
+  metaDescription?: string;
+  h1Title?: string;
 }
 
 export interface FAQ {
@@ -81,6 +85,10 @@ export const tools: Tool[] = [
     categoryId: "pregnancy",
     shortDescription: "Calculate your baby's due date based on your last menstrual period",
     icon: "📅",
+    // SEO
+    metaTitle: "Due Date Calculator: Conception, IVF & Ultrasound Date",
+    metaDescription: "Calculate your baby's due date accurately. Support for natural conception, IVF (3-day/5-day transfer), and ultrasound dating.",
+    h1Title: "Pregnancy Due Date Calculator (IVF & Natural)",
   },
   {
     id: "ovulation-calculator",
@@ -89,6 +97,9 @@ export const tools: Tool[] = [
     categoryId: "pregnancy",
     shortDescription: "Find your most fertile days to maximize chances of conception",
     icon: "🌸",
+    // SEO
+    metaTitle: "Ovulation Calculator & Fertile Window Tracker",
+    h1Title: "Ovulation Calculator: Track Your Fertile Days",
   },
   {
     id: "pregnancy-week-calculator",
@@ -97,6 +108,9 @@ export const tools: Tool[] = [
     categoryId: "pregnancy",
     shortDescription: "Find out how many weeks pregnant you are",
     icon: "🤱",
+    // SEO
+    metaTitle: "Pregnancy Week Calculator: What Week Am I In?",
+    h1Title: "Pregnancy Week Calculator by Due Date",
   },
   // Health & Fitness
   {
@@ -106,6 +120,10 @@ export const tools: Tool[] = [
     categoryId: "health",
     shortDescription: "Calculate your Body Mass Index and find your healthy weight range",
     icon: "⚖️",
+    // SEO
+    metaTitle: "Free BMI Calculator (kg/lbs) - Check Your Ideal Weight",
+    metaDescription: "Calculate your Body Mass Index (BMI) easily. Supports metric (kg/cm) and imperial (lbs/ft) units. Check healthy weight ranges for men and women.",
+    h1Title: "BMI Calculator for Men, Women & Kids",
   },
   {
     id: "calorie-calculator",
@@ -114,6 +132,9 @@ export const tools: Tool[] = [
     categoryId: "health",
     shortDescription: "Calculate your daily calorie needs for weight goals",
     icon: "🍎",
+    // SEO
+    metaTitle: "Daily Calorie Calculator: How Much to Eat to Lose Weight",
+    h1Title: "Calorie Calculator for Weight Loss & Gain",
   },
   // Finance & Money
   {
@@ -123,6 +144,10 @@ export const tools: Tool[] = [
     categoryId: "finance",
     shortDescription: "Calculate monthly payments and total interest for loans",
     icon: "🏦",
+    // SEO
+    metaTitle: "Loan Calculator: Calculate Payment, Interest & Amortization",
+    metaDescription: "Simple loan calculator with amortization schedule. Calculate monthly payments for mortgages, car loans, and personal loans.",
+    h1Title: "Loan Calculator with Monthly Payments",
   },
   {
     id: "compound-interest-calculator",
@@ -131,6 +156,10 @@ export const tools: Tool[] = [
     categoryId: "finance",
     shortDescription: "See how your money grows with compound interest over time",
     icon: "📈",
+    // SEO
+    metaTitle: "Compound Interest Calculator - Investment Growth Formula",
+    metaDescription: "Visual compound interest calculator. Calculate future value of your savings with monthly or daily contributions and annual interest.",
+    h1Title: "Compound Interest Calculator (Daily/Monthly)",
   },
   {
     id: "tip-calculator",
@@ -148,6 +177,9 @@ export const tools: Tool[] = [
     categoryId: "date",
     shortDescription: "Calculate exact age in years, months, and days",
     icon: "🎂",
+    // SEO
+    metaTitle: "Age Calculator: Calculate Your Exact Age in Days/Months",
+    h1Title: "Age Calculator by Date of Birth",
   },
   {
     id: "days-between-dates",
@@ -173,6 +205,8 @@ export const tools: Tool[] = [
     categoryId: "converter",
     shortDescription: "Convert between different weight units (kg, lbs, oz)",
     icon: "🏋️",
+    // SEO
+    h1Title: "Weight Unit Converter (Kg to Lbs)",
   },
   {
     id: "temperature-converter",
@@ -181,6 +215,8 @@ export const tools: Tool[] = [
     categoryId: "converter",
     shortDescription: "Convert between Celsius, Fahrenheit, and Kelvin",
     icon: "🌡️",
+    // SEO
+    h1Title: "Temperature Converter (Celsius & Fahrenheit)",
   },
   {
     id: "speed-converter",
